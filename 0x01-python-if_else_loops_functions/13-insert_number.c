@@ -1,23 +1,39 @@
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "lists.h"
 /**
- * insert_node - a fun.. in C that insert a number in linked list
- * @head: pointer for head of linked list
- * @number: valu to insert
- * Return: pointer of a new node
+ * insert_node - inserts a number in an ordered linked list
+ * @head: double pointer to the linked list
+ * @number: number to insert in the new node
+ *
+ * Return: address of the new node, or NULL
  */
 listint_t *insert_node(listint_t **head, int number)
 {
-	struct listint_t *ptr, *temp;
+	listint_t *new, *tmp, *prev;
 
-	if (head == NULL)
+	tmp = *head;
+	new = malloc(sizeof(listint_t));
+	if (!new)
 		return (NULL);
-	ptr = *head;
-	temp = (struct listint_t *)malloc(sizeof(struct listint_t));
-	temp->n = number;
-	temp->next = NULL;
-	while (ptr->next != NULL)
+	new->n = number;
+	if (!*head || (*head)->n > number)
 	{
-		ptr = ptr->next;
+		new->next = *head;
+		*head = new;
+		return (*head);
 	}
-	ptr->next = temp;
-	return (temp);
+	while (tmp)
+	{
+		if (tmp->n > number)
+		{
+			break;
+		}
+		prev = tmp;
+		tmp = tmp->next;
+	}
+	new->next = tmp;
+	prev->next = new;
+	return (*head);
 }
